@@ -77,15 +77,28 @@ const Login: React.FC = () => {
   return (
     <Box
       sx={{
+        // forzamos el tamaño completo
+        width: '100vw',
+        height: '100vh',
         minHeight: '100vh',
+
+        // rompemos las restricciones del padre
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        margin: 0,
+        padding: 0,
+
+        // configuramos le fondo
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        position: 'relative',
         backgroundImage: `url(${fondoDeportes})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
+        backgroundAttachment: 'fixed', // mantiene el fondo fijo al hacer el scroll 
+        overflow: 'auto', // permitimos el scroll si la pantalla es muy pequeña
       }}
     >
       {/* Capa sutil para que la imagen se vea pero el texto sea legible (sin taparla) */}
