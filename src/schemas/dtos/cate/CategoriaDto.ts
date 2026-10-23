@@ -1,3 +1,5 @@
+import { Deporte } from "../deporte/DeporteDto";
+
 // Entidad principal (como viene del backend)
 export interface Categoria {
   id: number;
@@ -10,13 +12,6 @@ export interface Categoria {
   deporteId?: number;
   createdAt?: string;
   updatedAt?: string;
-}
-
-// para usar select (más simple para busquedas)
-export interface Deporte {
-  id: number;
-  nombre: string;
-  activo?: boolean;
 }
 
 // DTO para crear/editar una categoría
