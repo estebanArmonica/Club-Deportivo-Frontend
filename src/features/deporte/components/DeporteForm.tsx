@@ -10,12 +10,12 @@ import {
   Grid,
   CircularProgress,
 } from '@mui/material';
+import { z } from 'zod';
 import { deporteSchema, DeporteFormData } from '../../../schemas/dtos/deporte/DeporteSchema';
 import { Deporte } from '../../../schemas/dtos/deporte/DeporteDto';
-import z from 'zod';
 
 interface DeporteFormProps {
-  initialData?: Deporte | null; // Si existe, es modo edición
+  initialData?: Deporte | null;
   onSubmit: (data: DeporteFormData) => Promise<void>;
   onCancel: () => void;
   isSubmitting?: boolean;
@@ -43,7 +43,7 @@ const DeporteForm: React.FC<DeporteFormProps> = ({
   });
 
   return (
-    <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate>
+    <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{ mt: 2 }}>
       <Grid container spacing={3}>
         <Grid size={12}>
           <Controller
@@ -55,6 +55,7 @@ const DeporteForm: React.FC<DeporteFormProps> = ({
                 label="Nombre del Deporte"
                 fullWidth
                 required
+                autoFocus // Para que el cursor empiece aquí al abrir el modal
                 error={!!errors.nombre}
                 helperText={errors.nombre?.message}
                 disabled={isSubmitting}
@@ -100,29 +101,27 @@ const DeporteForm: React.FC<DeporteFormProps> = ({
             )}
           />
         </Grid>
-
-        <Grid size={12}>
-          <Box sx={{ display: 'flex', gap: 2, justifyContent: 'flex-end', mt: 2 }}>
-            <Button
-              variant="outlined"
-              color="inherit"
-              onClick={onCancel}
-              disabled={isSubmitting}
-            >
-              Cancelar
-            </Button>
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              disabled={isSubmitting}
-              startIcon={isSubmitting ? <CircularProgress size={20} /> : null}
-            >
-              {isEditing ? 'Actualizar' : 'Crear'} Deporte
-            </Button>
-          </Box>
-        </Grid>
       </Grid>
+
+      <Box sx={{ display: 'flex', gap: 2, justifyContent: 'flex-end', mt: 4 }}>
+        <Button
+          variant="outlined"
+          color="inherit"
+          onClick={onCancel}
+          disabled={isSubmitting}
+        >
+          Cancelar
+        </Button>
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          disabled={isSubmitting}
+          startIcon={isSubmitting ? <CircularProgress size={20} /> : null}
+        >
+          {isEditing ? 'Actualizar' : 'Crear'} Deporte
+        </Button>
+      </Box>
     </Box>
   );
 };

@@ -108,10 +108,10 @@ const Layout: React.FC = () => {
 
   // Submenú de Categorías
   const categoryItems = [
-    { label: 'Crear Categorías', path: '/categorias/cate-crear',   icon: <AddCircle fontSize="small" /> },
-    { label: 'Crear Equipo',     path: '/categorias/equipo-crear', icon: <AddCircle fontSize="small" /> },
-    { label: 'Crear Deporte',    path: '/categorias/deporte-crear',icon: <AddCircle fontSize="small" /> },
-    { label: 'Crear Grupo',      path: '/categorias/grupo-crear',  icon: <AddCircle fontSize="small" /> },
+    { label: 'Ver Categorías', path: '/categorias',   icon: <AddCircle fontSize="small" /> },
+    { label: 'Ver Equipo',     path: '/categorias/equipo-crear', icon: <AddCircle fontSize="small" /> },
+    { label: 'Ver Deporte',    path: '/deportes',icon: <AddCircle fontSize="small" /> },
+    { label: 'Ver Grupo',      path: '/categorias/grupo-crear',  icon: <AddCircle fontSize="small" /> },
     { label: 'Listar Categorías', path: '/categorias/listar', icon: <ListAlt fontSize="small" /> },
   ];
 
