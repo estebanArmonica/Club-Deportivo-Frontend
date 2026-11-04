@@ -8,7 +8,6 @@ import PublicRoute from './components/routes/PublicRoute';
 import Layout from './components/layouts/Layout';
 import Login from './pages/auth/Login';
 import Dashboard from './pages/admin/Dashboard';
-import Unauthorized from './pages/errors/Unathorized';
 
 // categorias y deportes
 import DeportesPage from './features/deporte/pages/DeportesPage';
@@ -23,15 +22,15 @@ import CanchasPage from './features/cancha/pages/CanchasPage';
 import ApoderadosPage from './features/apoderado/pages/ApoderadosPage';
 
 // administración de usuarios y pagos de inscripciones
-import UsuariosPage from './features/usuario/pages/UsuariosPage';
-import PagosPage from './features/pago/pages/PagosPage';
+import UsuariosPage from './features/user/pages/UsuariosPage';
+import PagosPage from './features/pago/pages/ReservasPage';
 
 // clases, reservasm inscripciones, asistencias y encargados
 import ClasesPage from './features/clase/pages/ClasesPage';
 import ReservasPage from './features/reserva/pages/ReservasPage';
 import InscripcionesPage from './features/inscripcion/pages/InscripcionesPage';
 import AsistenciasPage from './features/asistencia/pages/AsistenciasPage';
-import EncargadosPage from './features/encargadoSucursal/pages/EncargadosPage';
+import EncargadosPage from './features/encargadorSucursal/pages/EncargadosPage';
 import ProfesoresPage from './features/profesorGrupo/pages/ProfesoresPage';
 
 // errores personalizados 

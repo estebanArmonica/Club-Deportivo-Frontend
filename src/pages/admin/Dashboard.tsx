@@ -214,7 +214,7 @@ const Dashboard: React.FC = () => {
                 }}
               >
                 <CardContent sx={{ p: 3, '&:last-child': { pb: 3 } }}>
-                  <Grid container spacing={3} alignItems="center">
+                  <Grid container spacing={3} sx={{ alignItems: "center" }}>
                     {/* Gráfico de barras a la izquierda */}
                     <Grid size={{ xs: 12, sm: 7 }}>
                       <Box

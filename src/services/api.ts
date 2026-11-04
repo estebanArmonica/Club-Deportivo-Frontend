@@ -4,7 +4,7 @@ import { env } from '../config/env';
 // extendemos la interfaz de InternalAxiosRequestConfig para agregar el _retry
 declare module 'axios' {
   interface InternalAxiosRequestConfig {
-    _retry?: ConstrainBooleanOrDOMString;
+    _retry?: boolean;
   }
 }
 
@@ -64,6 +64,27 @@ api.interceptors.response.use(
         window.location.href = '/login';
         return Promise.reject(refreshError);
       }
+    }
+
+    // manejo de errores de servidor
+    if (error.response) {
+      const status = error.response.status;
+
+      // Error 403: Sin permisos (Forbidden)
+      if (status === 403) {
+        window.location.href = '/403';
+      }
+      
+      // Error 500 o más: El servidor explotó (Internal Server Error)
+      if (status >= 500) {
+        window.location.href = '/500';
+      }
+
+      if (status === 503) {
+        window.location.href = '/mantenimiento';
+      }
+    } else if (error.request) {
+      console.error('Error de red o servidor caído');
     }
 
     return Promise.reject(error);
