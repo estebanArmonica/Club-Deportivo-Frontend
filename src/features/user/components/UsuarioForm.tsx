@@ -41,7 +41,7 @@ const UsuarioForm: React.FC<UsuarioFormProps> = ({
       nombre: initialData?.nombre || '',
       email: initialData?.email || '',
       password: '', // Siempre vacío al abrir
-      activo: initialData?.activo ?? true,
+      activo: initialData?.isActive ?? true,
     },
   });
 

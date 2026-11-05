@@ -7,7 +7,7 @@ import { toast } from 'react-hot-toast';
 import { reservaService } from '../../../services/reserva/reserva.service';
 import ReservaForm from '../../reserva/components/ReservaForm';
 
-const ReservasPage = () => {
+const PagosPage = () => {
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
@@ -74,4 +74,4 @@ const ReservasPage = () => {
     </Box>
   );
 };
-export default ReservasPage;
+export default PagosPage;

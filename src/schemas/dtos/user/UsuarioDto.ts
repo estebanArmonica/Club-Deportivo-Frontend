@@ -12,7 +12,7 @@ export interface Usuario {
     nombre: string;
     apellido?: string;
     email: string;
-    activo: boolean;
+    isActive: boolean;
     createdAt: string;   // ISO datetime "YYYY-MM-DDTHH:mm:ss"
 }
 

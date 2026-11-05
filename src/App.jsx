@@ -2,12 +2,15 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import { AuthProvider } from './context/auth/AuthContext';
+import { AuthProvider, useAuth } from './context/auth/AuthContext';
 import ProtectedRoute from './components/routes/ProtectedRoute';
 import PublicRoute from './components/routes/PublicRoute';
 import Layout from './components/layouts/Layout';
+import UserLayout from './components/layouts/UserLayout';
+
 import Login from './pages/auth/Login';
-import Dashboard from './pages/admin/Dashboard';
+import ProfilePage from './pages/profiles/ProfilePage';
+import DashboardResolver from './pages/DashboardResolver';
 
 // categorias y deportes
 import DeportesPage from './features/deporte/pages/DeportesPage';
@@ -23,7 +26,7 @@ import ApoderadosPage from './features/apoderado/pages/ApoderadosPage';
 
 // administración de usuarios y pagos de inscripciones
 import UsuariosPage from './features/user/pages/UsuariosPage';
-import PagosPage from './features/pago/pages/ReservasPage';
+import PagosPage from './features/pago/pages/PagosPage';
 
 // clases, reservasm inscripciones, asistencias y encargados
 import ClasesPage from './features/clase/pages/ClasesPage';
@@ -55,76 +58,98 @@ const theme = createTheme({
   },
 });
 
+// Creamos un componente interno para poder usar useAuth()
+function AppRoutes() {
+  const { hasAnyRole } = useAuth(); // Asumiendo que tu AuthContext tiene esta función
+
+  return (
+    <Router>
+      <Routes>
+        {/* Ruta pública */}
+        <Route path="/login" element={
+          <PublicRoute>
+            <Login />
+          </PublicRoute>
+        } />
+        
+        {/* Rutas de errores personalizados (Públicas) */}
+        <Route path="/unauthorized" element={<Unauthorized />} />
+        <Route path="/400" element={<Error400 />} />
+        <Route path="/403" element={<Error403 />} />
+        <Route path="/404" element={<Error404 />} />
+        <Route path="/500" element={<Error500 />} />
+        <Route path="/mantenimiento" element={<MaintenancePage />} />
+        
+        {/* Rutas protegidas (decide qué Layout se utiliza según el rol) */}
+        <Route path="/" element={
+          <ProtectedRoute>
+            {hasAnyRole(['admin']) ? <Layout /> : <UserLayout />}
+          </ProtectedRoute>
+        }>
+          {/* Redirección por defecto */}
+          <Route index element={<Navigate to="/dashboard" replace />} />
+          
+          {/* Dashboard (El Resolver decide qué mostrar) */}
+          <Route path="dashboard" element={<DashboardResolver />} />
+          
+          {/* Deportes y Categorías */}
+          <Route path="deportes" element={<DeportesPage />} />
+          <Route path="categorias" element={<CategoriasPage />} />
+          
+          {/* Alumnos, Grupos, Apoderados */}
+          <Route path="alumnos" element={<AlumnosPage />} />
+          <Route path="grupos" element={<GruposPage />} />
+          <Route path="apoderados" element={<ApoderadosPage />} />
+          
+          {/* Sucursales, Clubes, Canchas */}
+          <Route path="sucursales" element={<SucursalesPage />} />
+          <Route path="clubes" element={<ClubesPage />} />
+          <Route path="canchas" element={<CanchasPage />} />
+          
+          {/* Usuarios (Solo admin) y Pagos */}
+          <Route path="usuarios" element={
+            <ProtectedRoute roles={['admin']}>
+              <UsuariosPage />
+            </ProtectedRoute>
+          } />
+          <Route path="pagos" element={<PagosPage />} />
+          
+          {/* Clases y Reservas */}
+          <Route path="clases" element={<ClasesPage />} />
+          <Route path="reservas" element={<ReservasPage />} />
+          
+          {/* Inscripciones (Admin y Encargado) y Asistencias (Admin y Profesor) */}
+          <Route path="inscripciones" element={
+            <ProtectedRoute roles={['admin', 'encargado_sucursal']}>
+              <InscripcionesPage />
+            </ProtectedRoute>
+          } />
+          <Route path="asistencias" element={
+            <ProtectedRoute roles={['admin', 'profesor_grupo']}>
+              <AsistenciasPage />
+            </ProtectedRoute>
+          } />
+          
+          <Route path="encargados" element={<EncargadosPage />} />
+          <Route path="profesores" element={<ProfesoresPage />} />
+
+          {/* pefil */}
+          <Route path="profile" element={<ProfilePage />} />
+        </Route>
+
+        {/* Comodín único para rutas no encontradas */}
+        <Route path="*" element={<Error404 />} />
+      </Routes>
+    </Router>
+  );
+}
+
 function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <AuthProvider>
-        <Router>
-          <Routes>
-            {/* Ruta pública */}
-            <Route path="/login" element={
-              <PublicRoute>
-                <Login />
-              </PublicRoute>
-            } />
-            
-            {/* rutas de errores personalizados */}
-            <Route path="/unauthorized" element={<Unauthorized />} />
-            <Route path="/400" element={<Error400 />} />
-            <Route path="/403" element={<Error403 />} />
-            <Route path="/404" element={<Error404 />} />
-            <Route path="/500" element={<Error500 />} />
-            <Route path="/mantenimiento" element={<MaintenancePage />} />
-            
-            {/* Rutas protegidas dentro del Layout */}
-            <Route path="/" element={
-              <ProtectedRoute>
-                <Layout />
-              </ProtectedRoute>
-            }>
-              {/* Redirección por defecto */}
-              <Route index element={<Navigate to="/dashboard" replace />} />
-              
-              {/* Dashboard */}
-              <Route path="dashboard" element={<Dashboard />} />
-              
-              {/* 🏟️ Deportes y Categorías */}
-              <Route path="deportes" element={<DeportesPage />} />
-              <Route path="categorias" element={<CategoriasPage />} />
-              
-              {/* 👥 Alumnos, Grupos, Apoderados */}
-              <Route path="alumnos" element={<AlumnosPage />} />
-              <Route path="grupos" element={<GruposPage />} />
-              <Route path="apoderados" element={<ApoderadosPage />} />
-              
-              {/* 🏢 Sucursales, Clubes, Canchas */}
-              <Route path="sucursales" element={<SucursalesPage />} />
-              <Route path="clubes" element={<ClubesPage />} />
-              <Route path="canchas" element={<CanchasPage />} />
-              
-              {/* 💼 Usuarios y Pagos */}
-              <Route path="usuarios" element={<UsuariosPage />} />
-              <Route path="pagos" element={<PagosPage />} />
-              
-              {/* 📅 Clases y Reservas */}
-              <Route path="clases" element={<ClasesPage />} />
-              <Route path="reservas" element={<ReservasPage />} />
-              
-              {/* 📝 Inscripciones, Asistencias y Asignaciones */}
-              <Route path="inscripciones" element={<InscripcionesPage />} />
-              <Route path="asistencias" element={<AsistenciasPage />} />
-              <Route path="encargados" element={<EncargadosPage />} />
-              <Route path="profesores" element={<ProfesoresPage />} />
-            </Route>
-
-            {/* Cualquier ruta no encontrada, vuelve al inicio */}
-            <Route path="*" element={<Navigate to="/" replace />} />
-
-            {/* por defecto si no encuentra la ruta */}
-            <Route path="*" element={<Error404 />} />
-          </Routes>
-        </Router>
+        <AppRoutes />
       </AuthProvider>
     </ThemeProvider>
   );

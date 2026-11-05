@@ -212,24 +212,32 @@ class AuthService {
         return !this.isTokenExpired();
     }
 
-    getUserRoles(): string[] {
+    // helper de ayuda
+    private getRolesLimpios(): string[] {
         const user = this.getUserData();
-        return user?.roles || [];
+        const roles = user?.roles || [];
+
+        // limpiamos el prefijo de ROLE_ y pasamos todo a minúsculas
+        return roles.map(rol => rol.replace('ROLE_', '').toLowerCase());
+    }
+
+    getUserRoles(): string[] {
+        return this.getRolesLimpios();
     }
 
     hasRole(role: string): boolean {
-        const roles = this.getUserRoles();
-        return roles.includes(role);
+        const roles = this.getRolesLimpios();
+        return roles.includes(role.toLowerCase());
     }
 
     hasAnyRole(roles: string[]): boolean {
-        const userRoles = this.getUserRoles();
-        return roles.some(role => userRoles.includes(role));
+        const userRoles = this.getRolesLimpios();
+        return roles.some(role => userRoles.includes(role.toLowerCase()));
     }
 
     hasAllRoles(roles: string[]): boolean {
-        const userRoles = this.getUserRoles();
-        return roles.every(role => userRoles.includes(role));
+        const userRoles = this.getRolesLimpios();
+        return roles.every(role => userRoles.includes(role.toLowerCase()));
     }
 
     initSession(): { user: UserData; token: string } | null {
